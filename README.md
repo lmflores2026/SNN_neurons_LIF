@@ -1,42 +1,34 @@
 ![](../../workflows/gds/badge.svg) ![](../../workflows/docs/badge.svg) ![](../../workflows/test/badge.svg) ![](../../workflows/fpga/badge.svg)
 
-# Tiny Tapeout Verilog Project Template
+# LIF Spiking Neural Network
 
-- [Read the documentation for project](docs/info.md)
+A 2-neuron spiking neural network on GF180nm, submitted to Tiny Tapeout.
 
-## What is Tiny Tapeout?
+Each neuron implements the Leaky Integrate-and-Fire model: it integrates input current,
+leaks a fraction of its membrane potential every clock cycle, and fires when the potential
+reaches threshold. Each neuron has eight programmable synapses: four from the other neurons
+and four from external stimulus inputs.
 
-Tiny Tapeout is an educational project that aims to make it easier and cheaper than ever to get your digital and analog designs manufactured on a real chip.
+## How to use
 
-To learn more and get started, visit https://tinytapeout.com.
+1. Reset the chip
+2. Program 128 weight bits via the serial interface
+3. Drive stimulus spikes on `ui[7:4]` and observe spikes on `uo[1:0]`
+4. Pulse `ui[3]` to choose which neuron's membrane potential appears on `uio[7:0]`
 
-## Set up your Verilog project
+See [docs/info.md](docs/info.md) for full documentation.
 
-1. Add your Verilog files to the `src` folder.
-2. Edit the [info.yaml](info.yaml) and update information about your project, paying special attention to the `source_files` and `top_module` properties. If you are upgrading an existing Tiny Tapeout project, check out our [online info.yaml migration tool](https://tinytapeout.github.io/tt-yaml-upgrade-tool/).
-3. Edit [docs/info.md](docs/info.md) and add a description of your project.
-4. Adapt the testbench to your design. See [test/README.md](test/README.md) for more information.
+## Pin mapping
 
-The GitHub action will automatically build the ASIC files using [LibreLane](https://www.zerotoasiccourse.com/terminology/librelane/).
+Inputs
+- `ui[0]` serial weight data
+- `ui[1]` serial clock enable
+- `ui[2]` programming mode
+- `ui[3]` step to the next observed neuron
+- `ui[7:4]` external stimulus spikes
 
-## Enable GitHub actions to build the results page
-
-- [Enabling GitHub Pages](https://tinytapeout.com/faq/#my-github-action-is-failing-on-the-pages-part)
-
-## Resources
-
-- [FAQ](https://tinytapeout.com/faq/)
-- [Digital design lessons](https://tinytapeout.com/digital_design/)
-- [Learn how semiconductors work](https://tinytapeout.com/siliwiz/)
-- [Join the community](https://tinytapeout.com/discord)
-- [Build your design locally](https://www.tinytapeout.com/guides/local-hardening/)
-
-## What next?
-
-- [Submit your design to the next shuttle](https://app.tinytapeout.com/).
-- Edit [this README](README.md) and explain your design, how it works, and how to test it.
-- Share your project on your social network of choice:
-  - LinkedIn [#tinytapeout](https://www.linkedin.com/search/results/content/?keywords=%23tinytapeout) [@TinyTapeout](https://www.linkedin.com/company/100708654/)
-  - Mastodon [#tinytapeout](https://chaos.social/tags/tinytapeout) [@matthewvenn](https://chaos.social/@matthewvenn)
-  - X (formerly Twitter) [#tinytapeout](https://twitter.com/hashtag/tinytapeout) [@tinytapeout](https://twitter.com/tinytapeout)
-  - Bluesky [@tinytapeout.com](https://bsky.app/profile/tinytapeout.com)
+Outputs
+- `uo[1:0]` spike outputs, one per neuron
+- `uo[2]` high when weight programming is complete
+- `uo[3]` index of the observed neuron
+- `uio[7:0]` membrane potential of the observed neuron
