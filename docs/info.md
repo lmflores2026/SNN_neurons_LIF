@@ -21,7 +21,7 @@ Each neuron has eight synapses: two from the neurons' spikes (both neurons, incl
 four from external stimulus inputs on ui[7:4], and two unconnected synapses (reserved, no effect). Positive weights push the membrane potential towards threshold,
 negative weights pull it away. The potential saturates at -128 and 127 instead of wrapping.
 
-                        <img width="675" height="495" alt="image" src="https://github.com/user-attachments/assets/b7bc04e0-5808-418b-8898-c4481d6c32ad" />
+<img width="675" height="495" alt="image" src="https://github.com/user-attachments/assets/b7bc04e0-5808-418b-8898-c4481d6c32ad" />
 
 Here is what each block does:
 
