@@ -6,8 +6,11 @@ A 2-neuron spiking neural network on GF180nm, submitted to Tiny Tapeout.
 
 Each neuron implements the Leaky Integrate-and-Fire model: it integrates input current,
 leaks a fraction of its membrane potential every clock cycle, and fires when the potential
-reaches threshold. Each neuron has eight programmable synapses: four from the other neurons
+reaches threshold. Each neuron has six programmable synapses: two from the other neurons
 and four from external stimulus inputs.
+
+<img width="675" height="495" alt="image" src="https://github.com/user-attachments/assets/ecd43fcd-d30f-4ce7-88fc-64d9e0ab529e" />
+
 
 ## How to use
 
