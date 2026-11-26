@@ -21,6 +21,18 @@ Each neuron has eight synapses: two from the neurons' spikes (both neurons, incl
 four from external stimulus inputs on ui[7:4], and two unconnected synapses (reserved, no effect). Positive weights push the membrane potential towards threshold,
 negative weights pull it away. The potential saturates at -128 and 127 instead of wrapping.
 
+                        <img width="675" height="495" alt="image" src="https://github.com/user-attachments/assets/b7bc04e0-5808-418b-8898-c4481d6c32ad" />
+
+Here is what each block does:
+
+weight.v: A 64-bit shift register. It is programmed serially using ui_in[0] (data), ui_in[1] (clock enable), and ui_in[2] (programming mode). It outputs weights[63:0] and asserts the `prog_done` signal once all 64 bits have been loaded.
+Synchronizer (within project.v): Passes ui_in[7:3] through two flip-flops. This includes 4 external stimuli (`stim`) and an `obs_step` signal. Each rising edge of `obs_step` toggles `obs_sel`.
+synapse.v: Receives 8 input spikes (2 recurrent, 4 external, and 2 unconnected). Each neuron uses 32 bits for weights—specifically, eight 4-bit signed weights. The output (i0/i1) is the sum of the weights corresponding to the active inputs.
+LIF_neuron.v (x2): Integrates the current with a leakage term defined as `v_mem >>> 3`. When the membrane potential (`v_mem`) reaches 64, it generates a spike and resets to 0.
+Feedback: Spikes from both neurons are fed back to the synapse (indicated by the amber line). This includes the self-synapse for each neuron.
+Outputs: `uio_out` carries the `v_mem` value of the neuron selected by `obs_sel`. `uo_out` consists of `{obs_sel, prog_done, spikes}`.
+
+
 ## How to test
 
 1) Hold rst_n low for at least 3 clock cycles, then release. All membrane potentials and spike outputs clear to zero.
