@@ -12,7 +12,7 @@ and four from external stimulus inputs.
 ## How to use
 
 1. Reset the chip
-2. Program 128 weight bits via the serial interface
+2. Program 64 weight bits via the serial interface
 3. Drive stimulus spikes on `ui[7:4]` and observe spikes on `uo[1:0]`
 4. Pulse `ui[3]` to choose which neuron's membrane potential appears on `uio[7:0]`
 
